@@ -5049,7 +5049,8 @@ sync_wins (void)
               if (frame)
                 {
                   cleanup_frame (frame);
-                  if (frame->number == win->scr->current_frame)
+                  if (frame->number == win->scr->current_frame
+                      && rp_current_screen == win->scr)
                     set_active_frame (frame, 0);
                 }
               withdraw_window (win);
