@@ -3600,8 +3600,8 @@ cmd_license (int interactive UNUSED, struct cmdarg **args UNUSED)
     }
 
   /* Offset the text so its in the center. */
-  x = s->left + (s->width - max_width) / 2;
-  y = s->top + (s->height - i * FONT_HEIGHT (s)) / 2;
+  x = (s->width - max_width) / 2;
+  y = (s->height - i * FONT_HEIGHT (s)) / 2;
   if (x < 0) x = 0;
   if (y < 0) y = 0;
 
