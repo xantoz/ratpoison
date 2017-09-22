@@ -3718,7 +3718,7 @@ cmd_help (int interactive, struct cmdarg **args)
 
           y += FONT_HEIGHT (s);
           /* Make sure the next line fits entirely within the window. */
-          if (y + FONT_HEIGHT (s) >= (s->top + s->height))
+          if (y + FONT_HEIGHT (s) >= s->height)
             {
               if (drawing_keys)
                 {
