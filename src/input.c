@@ -523,6 +523,16 @@ get_input (char *prompt, int history_id, completion_fn fn)
   return get_more_input (prompt, "", history_id, BASIC, fn);
 }
 
+void
+set_focus_and_sync (rp_screen *s, Window *focus)
+{
+    int revert;
+
+    XGetInputFocus (dpy, focus, &revert);
+    set_window_focus (s->input_window);
+    XSync (dpy, False);
+}
+
 char *
 get_more_input (char *prompt, char *preinput, int history_id,
                 enum completion_styles style, completion_fn compl_fn)
@@ -536,7 +546,7 @@ get_more_input (char *prompt, char *preinput, int history_id,
   char *final_input;
   edit_status status;
   Window focus;
-  int revert, done = 0;
+  int done = 0;
 
   history_reset();
 
@@ -555,9 +565,7 @@ get_more_input (char *prompt, char *preinput, int history_id,
   XRaiseWindow (dpy, s->input_window);
   XClearWindow (dpy, s->input_window);
   /* Switch focus to our input window to read the next key events. */
-  XGetInputFocus (dpy, &focus, &revert);
-  set_window_focus (s->input_window);
-  XSync (dpy, False);
+  set_focus_and_sync (s, &focus);
 
   update_input_window (s, line);
 
@@ -584,6 +592,7 @@ get_more_input (char *prompt, char *preinput, int history_id,
           break;
         case EDIT_NO_OP:
           ring_bell ();
+          set_focus_and_sync (s, &focus);
           break;
         case EDIT_ABORT:
           final_input = NULL;
