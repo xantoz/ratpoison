@@ -159,6 +159,7 @@ static cmdret * set_border (struct cmdarg **args);
 static cmdret * set_onlyborder(struct cmdarg **args);
 static cmdret * set_barborder (struct cmdarg **args);
 static cmdret * set_barinpadding (struct cmdarg **args);
+static cmdret * set_obeyresizehints(struct cmdarg **args);
 static cmdret * set_inputwidth (struct cmdarg **args);
 static cmdret * set_waitcursor (struct cmdarg **args);
 static cmdret * set_winfmt (struct cmdarg **args);
@@ -362,6 +363,7 @@ init_set_vars (void)
   add_set_var ("maxsizegravity", set_maxsizegravity, 1, "", arg_GRAVITY);
   add_set_var ("maxundos", set_maxundos, 1, "", arg_NUMBER);
   add_set_var ("msgwait", set_msgwait, 1, "", arg_NUMBER);
+  add_set_var ("obeyresizehints", set_obeyresizehints, 1, "", arg_NUMBER);
   add_set_var ("padding", set_padding, 4, "", arg_NUMBER, "", arg_NUMBER, "",
                arg_NUMBER, "", arg_NUMBER);
   add_set_var ("resizeunit", set_resizeunit, 1, "", arg_NUMBER);
@@ -3936,6 +3938,30 @@ cmd_msgwait (int interactive UNUSED, struct cmdarg **args)
 
   return set_msgwait (args);
 }
+
+static cmdret *
+set_obeyresizehints (struct cmdarg **args)
+{
+  rp_window *win;
+
+  if (args[0] == NULL)
+    return cmdret_new (RET_SUCCESS, "%d", defaults.obey_resize_hints);
+
+  if (ARG(0, number) != 0 && ARG(0, number) != 1)
+    return cmdret_new (RET_FAILURE, "set obeyresizehints: invalid argument");
+
+  defaults.obey_resize_hints = ARG(0, number);
+
+  /* Update all the visible windows. */
+  list_for_each_entry (win,&rp_mapped_window,node)
+    {
+      if (win_get_frame (win))
+        maximize (win);
+    }
+
+  return cmdret_new (RET_SUCCESS, NULL);
+}
+
 
 static cmdret *
 set_framemsgwait (struct cmdarg **args)
