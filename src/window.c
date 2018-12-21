@@ -410,7 +410,7 @@ find_frame_non_dedicated(rp_screen *current_screen)
 
   list_for_each_entry (screen, &rp_screens, node)
     {
-      if (current_screen == screen)
+      if (current_screen != screen)
         continue;
 
       list_for_each_entry (cur, &screen->frames, node)
