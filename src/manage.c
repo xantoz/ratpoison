@@ -717,7 +717,7 @@ maximize_normal (rp_window *win)
 
   /* Make sure we maximize to the nearest Resize Increment specified
      by the window */
-  if (win->hints->flags & PResizeInc)
+  if (win->hints->flags & PResizeInc && defaults.obey_resize_hints)
     {
       int amount;
       int delta;

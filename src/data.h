@@ -244,6 +244,7 @@ struct rp_defaults
   int input_window_size;
   int window_border_width;
   int only_border;
+  int obey_resize_hints;
 
   int bar_x_padding;
   int bar_y_padding;
