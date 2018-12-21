@@ -540,10 +540,11 @@ move_window (rp_window *win)
 {
   rp_frame *frame;
 
-  if (win->frame_number == EMPTY)
-    return;
-
   frame = win_get_frame (win);
+
+  /* Bail out if we don't get a frame */
+  if (frame == NULL)
+      return;
 
   /* X coord. */
   switch (win->gravity)
